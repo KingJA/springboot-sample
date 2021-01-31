@@ -205,6 +205,7 @@ public class SocketIOServiceImpl implements ISocketIOService {
      */
     private String getIpByClient(SocketIOClient client) {
         String sa = client.getRemoteAddress().toString();
+        System.out.println(sa);
         String clientIp = sa.substring(1, sa.indexOf(":"));
         return clientIp;
     }
