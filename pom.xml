@@ -9,6 +9,11 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>springboot-jpa</module>
+        <module>springboot-security</module>
+        <module>springboot-mybatis</module>
+        <module>springboot-tk-mybatis</module>
+        <module>springboot-elasticsearch</module>
+        <module>springboot-socket.io</module>
     </modules>
     <packaging>pom</packaging>
 

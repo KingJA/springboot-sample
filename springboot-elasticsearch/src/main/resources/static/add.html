@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-grid.min.css">
+    <link rel="stylesheet" href="css/bootstrap-reboot.min.css">
+</head>
+<body>
+<div class="container">
+    <div class="row" style="margin-top: 20px;">
+        <div class="col-12">
+            <h2>
+                添加图书
+            </h2>
+        </div>
+    </div>
+
+    <div class="row" style="margin-top: 20px;" id="app">
+        <div class="col-12">
+            <form action="/addBook" method="post">
+                <div class="form-group">
+                    <label for="name">图书名称</label>
+                    <input type="text" class="form-control" id="name" placeholder="请输入图书名称" name="name">
+                </div>
+                <div class="form-group">
+                    <label for="author">作者</label>
+                    <input type="text" class="form-control" id="author" placeholder="请输入作者"name="author">
+                </div>
+                <div class="form-group">
+                    <label for="des">图书简介</label>
+                    <textarea class="form-control" rows="3" placeholder="请输入图书简介" type="text" id="des"name="des"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="stock">库存</label>
+                    <input type="number" class="form-control" id="stock" placeholder="请输入库存"name="stock">
+                </div>
+                <div class="form-group">
+                    <label for="price">价格</label>
+                    <input type="number"  step="any" class="form-control" id="price" placeholder="请输入价格"name="price">
+                </div>
+
+                <button type="submit" class="btn btn-default">添加</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="./js/vue.js"></script>
+<script src="./js/axios.min.js"></script>
+<script>
+
+    var app;
+    app = new Vue({
+        el: '#app',
+        data: {
+            bookList: [],
+            keyword: '',
+            duration: ''
+        },
+        methods: {
+            getBooks: function () {
+                console.log("getBlogs");
+                var that = this;
+                axios.get("http://localhost:8081/books", {}).then(function (response) {
+                    that.blogList = response.data;
+                })
+            },
+            searchWithMysql: function () {
+                console.log("searchWithMysql");
+                var that = this;
+                var param = {"type": "mysql", "keyword": that.keyword};
+                axios.post("http://localhost:8081/search", param).then(function (response) {
+                    that.blogList = response.data.list;
+                    that.duration = response.data.duration;
+                })
+            },
+            searchWithEs: function () {
+                console.log("searchWithEs");
+                var that = this;
+                var param = {"type": "es", "keyword": that.keyword};
+                axios.post("http://localhost:8081/search", param).then(function (response) {
+                    that.blogList = response.data.list;
+                    that.duration = response.data.duration;
+                })
+            }
+        },
+        created: function () {
+            this.getBooks();
+        }
+    })
+
+
+</script>
+</body>
+</html>

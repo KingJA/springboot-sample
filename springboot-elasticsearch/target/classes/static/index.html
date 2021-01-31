@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-grid.min.css">
+    <link rel="stylesheet" href="css/bootstrap-reboot.min.css">
+</head>
+<body>
+<div class="container">
+    <div class="row" style="margin-top: 20px;">
+        <div class="col-12">
+            <h2>
+                图书管理系统
+            </h2>
+            <a href="/add">添加图书</a>
+        </div>
+    </div>
+
+    <div class="row" style="margin-top: 20px;" id="app">
+        <div class="col-12">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="请输入关键字" v-model="keyword">
+                <span class="input-group-btn"><button class="btn btn-default" type="button"
+                                                      v-on:click="searchWithEs">搜索</button></span>
+            </div>
+        </div>
+
+        <div class="col-12" v-for="(book,index) in bookList" style="margin-top: 20px;">
+            <div class="card">
+                <div class="card-body">
+                    <a href="" >   <h5 class="card-title" v-html="book.name"></h5></a>
+                    <p style="color: #999999" v-html="book.des"></p>
+                    <p style="color: #666666">
+                        <span>作者：{{book.author}} |</span>
+                        <span>价格：{{book.price}} |</span>
+                        <span>库存：{{book.stock}}</span>
+
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="./js/vue.js"></script>
+<script src="./js/axios.min.js"></script>
+<script src="./js/qs.js"></script>
+<script>
+
+    var app;
+    app = new Vue({
+        el: '#app',
+        data: {
+            bookList: [],
+            keyword: '',
+            duration: ''
+        },
+        methods: {
+            getBooks: function () {
+                console.log("getBooks");
+                axios.get("http://localhost:8081/books", {}).then(response=>{
+                    console.log(response);
+                    this.bookList = response.data;
+                })
+            },
+            searchWithEs: function () {
+                console.log("searchWithEs");
+                console.log(this.keyword);
+                var param = {"keyword": this.keyword};
+                axios.post("http://localhost:8081/search",Qs.stringify(param)).then(response=>{
+                    console.log(response.data);
+                    this.bookList = response.data;
+                })
+            }
+        },
+        created: function () {
+            this.getBooks();
+        }
+    })
+
+
+</script>
+</body>
+</html>
